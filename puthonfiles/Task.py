@@ -7,34 +7,17 @@
 #образом, необходимо реализовать валидацию загруженных данных с помощью спецификации
 #JSON Schema.
 
-import json
-import jsonschema
 
-# Загрузка данных из файла JSON
+import json
+from jsonschema import validate
+
+# Загружаем JSON Schema из файла
+with open('schema.json', 'r') as schema_file:
+    schema = json.load(schema_file)
+
 def load_workers(file_name):
     with open(file_name, "r", encoding="utf-8") as fin:
-        return json.load(fin)
-
-# Загрузка JSON Schema для валидации
-schema = {
-    "type": "object",
-    "properties": {
-        "name": {"type": "string"},
-        "post": {"type": "string"},
-        "year": {"type": "number"}
-    },
-    "required": ["name", "post", "year"]
-}
-
-# Валидация загруженных данных
-def validate_data(data, schema):
-    try:
-        jsonschema.validate(data, schema)
-        print("Данные прошли валидацию по схеме.")
-    except jsonschema.exceptions.ValidationError as e:
-        print(f"Данные не соответствуют схеме: {e}")
-
-# Загружаем данные
-loaded_data = load_workers("workers.json")
-# Валидируем данные
-validate_data(loaded_data, schema)
+        data = json.load(fin)
+        # Валидация данных из файла с использованием JSON Schema
+        validate(instance=data, schema=schema)
+        return data
