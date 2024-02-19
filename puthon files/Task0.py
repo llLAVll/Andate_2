@@ -1,9 +1,3 @@
-#Для своего варианта лабораторной работы 2.8 необходимо дополнительно реализовать
-#сохранение и чтение данных из файла формата JSON. Необходимо также проследить за тем,
-#чтобы файлы генерируемый этой программой не попадали в репозиторий лабораторной
-#работы.
-
-
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -25,7 +19,7 @@ def main():
 
     # Запись данных в файл формата JSON
     with open('data.json', 'w') as f:
-        json.dump(data, f)
+        json.dump(data, f, ensure_ascii=False, indent=4)
 
     # Чтение данных из файла формата JSON
     with open('data.json') as f:
@@ -36,7 +30,12 @@ def main():
     found = False
     for record in data:
         if record['расчетный счет плательщика'] == search_account:
-            print(f"Сумма, снятая с расчетного счета плательщика {search_account}: {record['перечисляемая сумма в руб']} руб")
+            output = {
+                "расчетный счет плательщика": record['расчетный счет плательщика'],
+                "расчетный счет получателя": record['расчетный счет получателя'],
+                "перечисляемая сумма в руб": record['перечисляемая сумма в руб']
+            }
+            print(json.dumps(output, ensure_ascii=False, indent=4))
             found = True
 
     if not found:
