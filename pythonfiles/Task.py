@@ -11,13 +11,23 @@
 import json
 from jsonschema import validate
 
-# Загружаем JSON Schema из файла
-with open('schema.json', 'r') as schema_file:
-    schema = json.load(schema_file)
+# Здесь определение вашего JSON Schema
+schema = {
+    "type": "object",
+    "properties": {
+        "name": {"type": "string"},
+        "post": {"type": "string"},
+        "year": {"type": "integer"}
+    },
+    "required": ["name", "post", "year"]
+}
 
 def load_workers(file_name):
     with open(file_name, "r", encoding="utf-8") as fin:
+        # Загружаем данные из файла
         data = json.load(fin)
-        # Валидация данных из файла с использованием JSON Schema
+        # Проверяем данные по схеме
         validate(instance=data, schema=schema)
         return data
+
+# Остальной код остается неизменным
